@@ -1,0 +1,4 @@
+﻿  main.cpp
+c:\yunfeng\work\cpp\cc150\ch1\cc150_array_and_string\ch1_extra1\main.cpp(32): warning C4018: '<': signed/unsigned mismatch
+c:\yunfeng\work\cpp\cc150\ch1\cc150_array_and_string\ch1_extra1\main.cpp(40): warning C4018: '<': signed/unsigned mismatch
+  Ch1_extra1.vcxproj -> C:\Yunfeng\work\cpp\CC150\ch1\CC150_Array_and_String\Debug\Ch1_extra1.exe
