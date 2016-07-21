@@ -348,6 +348,59 @@ linked_list* list_digits_add(linked_list* l1, linked_list* l2)
 	return result;
 }
 
+// Ch2_2.5
+/*
+Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
+DEFINITION
+Circular linked list: A (corrupt) linked list in which a node’s next pointer points to an earlier node, so as to make a loop in the linked list.
+EXAMPLE
+Input: A -> B -> C -> D -> E -> C [the same C as earlier]
+Output: C
+*/
+/*
+Solution Discussion:
+	1. hash table to store the address of each node, until find certian node have value in hash table
+	2. set slow pointer (1 step once) and fast pointer (2 step once)
+		[0, 1, ..., n-1]
+	   assuming the circle has n nodes. When slow pointer reach the start point s1=0,
+	   suppose fast pointer at s2. 
+	   We can prove after severl steps they will meet, after step:
+	   p1 = s1 + step
+	   p2 = s2 + 2xstep
+	   the distance between fast & slow pointer is:
+	   p2-p1 = (s2+2step)-(s1+step)=(s2-s1)+step=s2+step
+	   thus when s2+step = n, fast pointer will reach the same position with slow pointer
+		ex. 0 1 2 3 4	n=5
+			1 3 0 2 4	s2=1 step=4
+			4 1			s2=4 step=1
+			2 4 1 3
+		ex. 0 1 2 3 4 5	n=6
+			1 3 5 1 3 5
+			3 5 1 3
+			2 4 0 2 4
+	   The above prove that if there is a circle in linked list, using fast pointer &
+	   slow pointer could confirm that
+
+	   Find the start node of circle:
+	   Suppose the structure is  k + n(circle)
+	   when faster pointer meet slow pointer the total distance is
+	   d1 = k + s1
+	   d2 = 2(k+s1)
+	   and stop the faster pointer continue the slow pointer could get the circle number n
+	   (when slow pointer meet faster pointer again)
+
+	   k+qn+x=m		(slow)
+	   2m-m=m=pn	(fast-slow)
+	   k+qn+x=pn
+	   k+x = (p-q)n
+	   The meet position distance away from head is multiple of n
+	   put one pointer into head and move in same step, the meet again position is start of circle
+
+	   x+s = n
+	   k-s = (p-q-1)n
+*/
+//--------------------------------------------------------------------------------
+
 int main()
 {
 	int a[] = { 0,1,1,2,3,3,4,5,1 };
