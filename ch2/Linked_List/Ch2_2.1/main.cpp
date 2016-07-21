@@ -27,6 +27,7 @@ private:
 class linked_list
 {
 public:
+	linked_list() : head(NULL) , list_size(0) {};
 	linked_list(int*a, int n);
 	~linked_list();
 	
@@ -34,7 +35,7 @@ public:
 	int get_size() { return list_size; }
 	bool insert_node(node* n);
 	bool insert_node(int d);
-	bool remove_node();
+	bool remove_node();	// remove the last node
 
 	// Ch2_2.1
 	// Write code to remove duplicates from an unsorted linked list.
@@ -42,6 +43,45 @@ public:
 
 	// Ch2_2.2
 	// Implement an algorithm to find the nth to last element of a singly linked list.
+	//-----------------------------------------------------
+	// Solution:
+		// 1. scan list 2 times
+		// 2. since our linked list has size, it's easy
+		// 3. using stack, first in last out
+	//-----------------------------------------------------
+
+	// Ch2_2.3
+	/*
+		Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
+		EXAMPLE
+		Input: the node ‘c’ from the linked list a->b->c->d->e Result: nothing is returned, but the new linked list looks like a->b->d->e
+	*/
+	node* get_node(int d);		// get a node with value d
+	bool remove_node(node* n);	// remove specified node
+
+	// Ch2_2.4
+	/*
+	You have two numbers represented by a linked list, where each node contains a single digit. 
+	The digits are stored in reverse order, such that the 1’s digit is at the head of the list. 
+	Write a function that adds the two numbers and returns the sum as a linked list.
+	EXAMPLE
+	513 + 295 = 808
+	Input: (3 -> 1 -> 5), (5 -> 9 -> 2)
+	Output: 8 -> 0 -> 8
+	*/
+	friend linked_list* list_digits_add(linked_list* l1, linked_list* l2);
+
+	// Ch2_2.5
+	/*
+	Given a circular linked list, implement an algorithm which returns node at the beginning of the loop.
+	DEFINITION
+	Circular linked list: A (corrupt) linked list in which a node’s next pointer points to an earlier node, so as to make a loop in the linked list.
+	EXAMPLE
+	Input: A -> B -> C -> D -> E -> C [the same C as earlier]
+	Output: C
+	*/
+
+
 
 private:
 	node*	head;
@@ -167,8 +207,9 @@ bool linked_list::remove_node()
 	return true;
 }
 
-// Ch2_2.1
+// Ch2_2.1 ======================================
 // Write code to remove duplicates from an unsorted linked list.
+//--------------------------------------------------------------------------------
 bool linked_list::remove_duplicate()
 {
 	node* pivot = head;
@@ -205,6 +246,106 @@ bool linked_list::remove_duplicate()
 			pivot = pivot->get_next();
 		}
 	}
+
+	return true;
+}
+
+
+// Ch2_2.3 ======================================
+/*
+Implement an algorithm to delete a node in the middle of a single linked list, given only access to that node.
+EXAMPLE
+Input: the node ‘c’ from the linked list a->b->c->d->e Result: nothing is returned, but the new linked list looks like a->b->d->e
+*/
+//--------------------------------------------------------------------------------
+node* linked_list::get_node(int d)
+{
+	node* n = head;
+
+	while (n != NULL)
+	{
+		if (d == n->get_data())
+			break;
+		else
+			n = n->get_next();
+	}
+
+	return n;
+}
+
+bool linked_list::remove_node(node* n)
+{
+	if (NULL == n) return false;
+
+	node* next = n->get_next();
+
+	if (next == NULL) 
+	{
+		remove_node();	// if the node is the last one, should scan the list.
+	}
+	else
+	{
+		n->set_data(next->get_data());
+		n->set_next(next->get_next());
+		delete next;
+		list_size--;
+	}
+
+	return true;
+}
+
+// Ch2_2.4 ======================================
+/*
+You have two numbers represented by a linked list, where each node contains a single digit.
+The digits are stored in reverse order, such that the 1’s digit is at the head of the list.
+Write a function that adds the two numbers and returns the sum as a linked list.
+EXAMPLE
+513 + 295 = 808
+Input: (3 -> 1 -> 5), (5 -> 9 -> 2)
+Output: 8 -> 0 -> 8
+*/
+//--------------------------------------------------------------------------------
+linked_list* list_digits_add(linked_list* l1, linked_list* l2)
+{
+	linked_list* result = new linked_list;
+
+	node* n1 = l1->get_head();
+	node* n2 = l2->get_head();
+	
+	int r = 0;
+	int carry = 0;
+	while (NULL != n1 && NULL != n2)
+	{
+		int d1 = n1->get_data();
+		int d2 = n2->get_data();
+
+		r = ((d1 + d2 + carry) >= 10) ? ((d1 + d2 + carry) - 10) : (d1 + d2 + carry);
+		carry = ((d1 + d2 + carry) >= 10) ? 1 : 0;
+
+		node* n = new node(r);
+		result->insert_node(n);
+
+		n1 = n1->get_next();
+		n2 = n2->get_next();
+	}
+
+	node* remain;
+	remain = (n1 != NULL) ? n1 : (n2 != NULL) ? n2 : NULL;
+
+	while (NULL != remain)
+	{
+		int d = remain->get_data();
+
+		r = ((d + carry) >= 10) ? ((d + carry) - 10) : (d + carry);
+		carry = ((d + carry) >= 10) ? 1 : 0;
+
+		node* n = new node(r);
+		result->insert_node(n);
+
+		remain = remain->get_next();
+	}
+
+	return result;
 }
 
 int main()
@@ -223,11 +364,28 @@ int main()
 
 	cout << "List size = " << list->get_size() << endl;
 
+	// ch2_2.1
 	list->remove_duplicate();
 
 	cout << "List size = " << list->get_size() << endl;
 
-	delete list;
+	// ch2_2.3
+	node* n = list->get_node(5);
+	list->remove_node(n);
+	cout << "List size = " << list->get_size() << endl;
+
+	// ch2_2.4
+	int a1[] = { 4,1,5,3 };
+	int a2[] = { 5,9,7 };
+	linked_list* l1 = new linked_list(a1, sizeof(a1) / sizeof(a1[0]));
+	linked_list* l2 = new linked_list(a2, sizeof(a2) / sizeof(a2[0]));
+	linked_list* result = list_digits_add(l1, l2);
+
+	// ------ end ------
+	if(list) delete list;
+	if (l1) delete l1;
+	if (l2) delete l2;
+	if (result) delete result;
 
 	return 0;
 }
