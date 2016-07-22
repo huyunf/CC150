@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\yunfeng\work\cpp\cc150\ch3\stacks_and_queues\ch3_3.2\main.cpp(91): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Ch3_3.2.vcxproj -> C:\Yunfeng\work\cpp\CC150\ch3\Stacks_and_Queues\Debug\Ch3_3.2.exe
