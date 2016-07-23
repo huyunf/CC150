@@ -85,7 +85,7 @@ public:
 private:
 	void hanoi(int n, cstack* src, cstack* bri, cstack* dst);
 
-	static const unsigned int disk_num = 9;
+	static const unsigned int disk_num = 7;
 
 	cstack stack[3];
 };
