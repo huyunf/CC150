@@ -1,0 +1,4 @@
+﻿  main.cpp
+d:\work\cpp\cc150\ch4\trees_and_graphs\ch4_4.2\main.cpp(32): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
+  Ch4_4.2.vcxproj -> D:\work\Cpp\CC150\ch4\Trees_and_Graphs\Debug\Ch4_4.2.exe
