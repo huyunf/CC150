@@ -1,0 +1,3 @@
+﻿  main.cpp
+d:\work\cpp\cc150\ch5\bit_manipulation\ch5_5.1\main.cpp(47): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+  Ch5_5.1.vcxproj -> D:\work\Cpp\CC150\ch5\Bit_Manipulation\Debug\Ch5_5.1.exe
