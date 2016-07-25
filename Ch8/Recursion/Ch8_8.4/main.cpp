@@ -100,7 +100,7 @@ void permuation2_str(string& prev, string& str)
 		
 		str.erase(i, 1);
 
-		prev.insert(0, cur);
+		prev.insert(0, cur); 
 
 		permuation2_str(prev, str);
 

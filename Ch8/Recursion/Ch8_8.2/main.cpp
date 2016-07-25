@@ -21,7 +21,7 @@ bool check_valid(int n_x, int n_y, vector<pair<int, int>>* p)
 
 	return true;
 }
-
+ 
 void Robot_Path(int x, int y, vector<pair<int, int>>* v, vector<pair<int, int>>* p)
 {
 	if (x == 0 && y == 0)

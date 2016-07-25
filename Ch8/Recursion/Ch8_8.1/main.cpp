@@ -38,7 +38,7 @@ long long fn_nonrecur(long long n)
 		{
 			fn_2 = fn_1;
 			fn_1 = fn;
-		}
+		} 
 
 		fn = fn_1 + fn_2;
 	}

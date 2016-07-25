@@ -53,7 +53,7 @@ void subset1(int* a, int size, vector<vector<int>*> &s)
 		vector<int>* cur = new vector<int>;
 		cur->push_back(a[i]); // the single one
 
-		if (!s.empty())
+		if (!s.empty()) 
 		{
 			int cur_size = s.size();
 
