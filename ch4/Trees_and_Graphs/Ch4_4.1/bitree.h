@@ -63,6 +63,7 @@ public:
 
 	int minDepth();
 
+	// https://en.wikipedia.org/wiki/Tree_traversal
 	void Preorder_Traversal();	// cur, left, right
 	void Inorder_Traversal();	// left, cur, right
 	void Postorder_Traversal();	// left, right, cur
@@ -73,7 +74,7 @@ public:
 private:
 
 	void recur_insert(Node* cur, Node* n);
-	void recur_balance_insert(Node* cur, Node* n);
+	Node* recur_balance_insert(Node* cur, Node* n);
 	void recur_inorder(Node* n);
 	void recur_postorder(Node* n);
 
@@ -141,8 +142,29 @@ void BiTree::Inorder_Traversal()
 
 	Node* cur = head;
 
+#if 0
 	recur_inorder(cur);
+#else
+	list<Node*> *l = new list<Node*>;
 
+	while (l->size()!=0 || cur!=NULL)
+	{
+		if(cur!=NULL)
+		{
+			l->push_back(cur);
+			cur = cur->getLeft();
+		}
+		else
+		{
+			cur = l->back();
+			l->pop_back();
+
+			cout << "v: " << cur->getValue() << " height: " << cur->getHeight() << endl;
+
+			cur = cur->getRight();
+		}
+	}
+#endif
 	cout << "Inorder_Traversal" << endl << endl;
 	
 }
@@ -246,13 +268,69 @@ void BiTree::insert(Node* n)
 	}
 }
 
+// balance insert
 
-void BiTree::recur_balance_insert(Node* cur, Node* n)
+// rotate right
+/*
+			n
+		B	   T1
+	C	  T2
+D
+*/
+Node* rotate_right(Node* n)
+{
+	Node* B = n->getLeft();
+	Node* T1 = n->getRight();
+	Node* C = B == NULL ? NULL : B->getLeft();
+	Node* T2 = B == NULL ? NULL : B->getRight();
+	
+	n->setLeft(T2);
+	int lh = (T2 == NULL) ? 0 : T2->getHeight();
+	int rh = (T1 == NULL) ? 0 : T1->getHeight();
+	n->setHeight(lh > rh ? lh + 1 : rh + 1);
+
+	B->setRight(n);
+	lh = (C == NULL) ? 0 : C->getHeight();
+	rh = (n == NULL) ? 0 : n->getHeight();
+	n->setHeight(lh > rh ? lh + 1 : rh + 1);
+
+	return B;
+}
+
+// rotate left
+
+/*
+		n
+	T1		B	   
+		T2		C	  
+					D
+*/
+Node* rotate_left(Node* n)
+{
+	Node* B = n->getRight();
+	Node* T1 = n->getLeft();
+	Node* C = B == NULL ? NULL : B->getRight();
+	Node* T2 = B == NULL ? NULL : B->getLeft();
+
+	n->setRight(T2);
+	int lh = (T1 == NULL) ? 0 : T1->getHeight();
+	int rh = (T2 == NULL) ? 0 : T2->getHeight();
+	n->setHeight(lh > rh ? lh + 1 : rh + 1);
+
+	B->setLeft(n);
+	lh = (n == NULL) ? 0 : n->getHeight();
+	rh = (C == NULL) ? 0 : C->getHeight();
+	n->setHeight(lh > rh ? lh + 1 : rh + 1);
+
+	return B;
+}
+
+Node* BiTree::recur_balance_insert(Node* cur, Node* n)
 {
 	if (cur->getValue() > n->getValue()) // go left
 	{
 		if (cur->getLeft()) {
-			recur_balance_insert(cur->getLeft(), n);
+			cur->setLeft(recur_balance_insert(cur->getLeft(), n));
 		}
 		else {
 			cur->setLeft(n);
@@ -261,7 +339,7 @@ void BiTree::recur_balance_insert(Node* cur, Node* n)
 	else // go right
 	{
 		if (cur->getRight()) {
-			recur_balance_insert(cur->getRight(), n);
+			cur->setRight(recur_balance_insert(cur->getRight(), n));
 		}
 		else {
 			cur->setRight(n);
@@ -275,8 +353,36 @@ void BiTree::recur_balance_insert(Node* cur, Node* n)
 	cur->setHeight((lh > rh ? lh : rh) + 1);
 
 	// need rotate?
+	int balance = lh - rh;
 
+	// decide rotate pattern
+	// LL
+	if (balance > 1 && cur->getLeft() && n->getValue() < cur->getLeft()->getValue())
+	{
+		return rotate_right(cur);
+	}
 
+	// LR
+	if (balance > 1 && cur->getLeft() && n->getValue() >= cur->getLeft()->getValue())
+	{
+		cur->setLeft(rotate_left(cur->getLeft()));
+		return rotate_right(cur);
+	}
+
+	// RR
+	if (balance < -1 && cur->getRight() && n->getValue() >= cur->getRight()->getValue())
+	{
+		return rotate_left(cur);
+	}
+
+	// RL
+	if (balance < -1 && cur->getRight() && n->getValue() < cur->getRight()->getValue())
+	{
+		cur->setRight(rotate_right(cur->getRight()));
+		return rotate_left(cur);
+	}
+
+	return cur;
 }
 
 void BiTree::balance_insert(Node* n)
@@ -292,7 +398,7 @@ void BiTree::balance_insert(Node* n)
 	{
 		Node* cur = head;
 
-		recur_balance_insert(cur, n);
+		head = recur_balance_insert(cur, n);
 	}
 }
 

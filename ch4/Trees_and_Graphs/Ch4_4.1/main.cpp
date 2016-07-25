@@ -10,7 +10,7 @@ int main()
 	BiTree* bT = new BiTree;
 
 	int a[] = {
-		5, 3, 8, 1, 4, 7, 10, 2, 6, 9, 11, 12
+		5, 3, 8, 1, 4, 7, 10, 2, 6, 9, 11, 12, 13
 	};
 
 	for (int i = 0; i < sizeof(a) / sizeof(a[0]); i++)
@@ -27,6 +27,31 @@ int main()
 	bT->Postorder_Traversal();
 
 	cout << "Min Depth: "<< bT->minDepth() << endl;
+
+
+	BiTree* bibT = new BiTree;
+
+	int b[] = {
+		5, 3, 14, 16, 8, 1, 4, 17, 7, 15, 10, 2, 6, 9, 11, 12, 13
+	};
+
+	for (int i = 0; i < sizeof(b) / sizeof(b[0]); i++)
+	{
+		Node* n = new Node(b[i]);
+
+		bibT->balance_insert(n);
+	}
+
+	bibT->Preorder_Traversal();
+
+	bibT->Inorder_Traversal();
+
+	bibT->Postorder_Traversal();
+
+	cout << "Min Depth: " << bT->minDepth() << endl;
+
+	if (bT) delete bT;
+	if (bibT) delete bibT;
 
 	return 0;
 }
